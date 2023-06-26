@@ -48,7 +48,6 @@ class RecipeAdmin(admin.ModelAdmin):
         return obj.favorite_recipe.count()
 
 
-
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = (
