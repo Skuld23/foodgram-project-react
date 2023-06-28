@@ -1,19 +1,9 @@
-from .serializers import SubscribeRecipeSerializer
+from .permissions import IsAdminOrReadOnly
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import AllowAny
 from recipes.models import Recipe
-from api.permissions import IsAdminOrReadOnly
+from rest_framework.permissions import AllowAny
 
-
-class GetIsSubscribedMixin:
-    def get_is_subscribed(self, obj):
-        user = self.context['request'].user
-        return (
-            user.follower.filter(author=obj).exists()
-            if user.is_authenticated
-            else False
-        )
-
+from .serializers import SubscribeRecipeSerializer
 
 class GetObjectMixin:
     serializer_class = SubscribeRecipeSerializer
@@ -29,3 +19,5 @@ class GetObjectMixin:
 class PermissionAndPaginationMixin:
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
+
+
