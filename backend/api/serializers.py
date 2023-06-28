@@ -6,6 +6,7 @@ from drf_base64.fields import Base64ImageField
 from rest_framework import serializers
 
 from recipes.models import Ingredient, Recipe, RecipeIngredient, Subscribe, Tag
+from mixins import GetIsSubscribedMixin
 
 User = get_user_model()
 ERR_MSG = 'Не удается войти в систему с ввёдёнными данными.'
@@ -43,16 +44,6 @@ class TokenSerializer(serializers.Serializer):
                 code='authorization')
         attrs['user'] = user
         return attrs
-
-
-class GetIsSubscribedMixin:
-    def get_is_subscribed(self, obj):
-        user = self.context['request'].user
-        return (
-            user.follower.filter(author=obj).exists()
-            if user.is_authenticated
-            else False
-        )
 
 
 class UserListSerializer(GetIsSubscribedMixin, serializers.ModelSerializer):
@@ -171,8 +162,10 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         ingredients = data['ingredients']
         ingredient_list = []
         for items in ingredients:
-            ingredient = get_object_or_404(
-                Ingredient, id=items['id'])
+            ingredient = items['ingredient']
+            if int(ingredient) < 1:
+                raise serializers.ValidationError(
+                    'Количество ингредиента >= 1!')
             if ingredient in ingredient_list:
                 raise serializers.ValidationError(
                     'Ингредиент должен быть уникальным!')
@@ -185,27 +178,14 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
             if not Tag.objects.filter(name=tag_name).exists():
                 raise serializers.ValidationError(
                     f'Тэга {tag_name} не существует!')
+        time = data['time']
+        if int(time) < 1:
+            raise serializers.ValidationError('Время приготовления >= 1!')
         return data
-
-    def validate_cooking_time(self, cooking_time):
-        if int(cooking_time) < 1:
-            raise serializers.ValidationError(
-                'Время приготовления >= 1!')
-        return cooking_time
-
-    def validate_ingredients(self, ingredients):
-        if not ingredients:
-            raise serializers.ValidationError(
-                'Мин. 1 ингредиент в рецепте!')
-        for ingredient in ingredients:
-            if int(ingredient.get('amount')) < 1:
-                raise serializers.ValidationError(
-                    'Количество ингредиента >= 1!')
-        return ingredients
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            RecipeIngredient.objects.create(
+            RecipeIngredient.objects.bulk_create(
                 recipe=recipe,
                 ingredient_id=ingredient.get('id'),
                 amount=ingredient.get('amount'), )
