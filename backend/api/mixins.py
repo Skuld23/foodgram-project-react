@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny
 
 from .serializers import SubscribeRecipeSerializer
 
+
 class GetObjectMixin:
     serializer_class = SubscribeRecipeSerializer
     permission_classes = (AllowAny,)
@@ -19,5 +20,3 @@ class GetObjectMixin:
 class PermissionAndPaginationMixin:
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
-
-

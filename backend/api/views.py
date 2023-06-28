@@ -70,9 +70,9 @@ class AddAndDeleteSubscribe(generics.RetrieveDestroyAPIView,
         self.request.user.follower.filter(author=instance).delete()
 
 
-class AddDeleteFavoriteRecipe(
-    GetObjectMixin, generics.RetrieveDestroyAPIView,
-    generics.ListCreateAPIView):
+class AddDeleteFavoriteRecipe(GetObjectMixin,
+                              generics.RetrieveDestroyAPIView,
+                              generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         instance = self.get_object()
         request.user.favorite_recipe.recipe.add(instance)
@@ -83,9 +83,8 @@ class AddDeleteFavoriteRecipe(
         self.request.user.favorite_recipe.recipe.remove(instance)
 
 
-class AddDeleteShoppingCart(
-    GetObjectMixin, generics.RetrieveDestroyAPIView,
-    generics.ListCreateAPIView):
+class AddDeleteShoppingCart(GetObjectMixin, generics.RetrieveDestroyAPIView,
+                            generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         instance = self.get_object()
