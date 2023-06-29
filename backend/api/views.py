@@ -129,8 +129,7 @@ class UsersViewSet(UserViewSet):
         return UserListSerializer
 
     def perform_create(self, serializer):
-        password = make_password(
-          serializer.validated_data['password'])
+        password = make_password(serializer.validated_data['password'])
         serializer.save(password=password)
 
     @action(
