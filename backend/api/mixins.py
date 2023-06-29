@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
-from recipes.models import Recipe
 from rest_framework.permissions import AllowAny
+
+from recipes.models import Recipe
 
 from .permissions import IsAdminOrReadOnly
 from .serializers import SubscribeRecipeSerializer

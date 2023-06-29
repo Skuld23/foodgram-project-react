@@ -2,8 +2,9 @@ import django.contrib.auth.password_validation as validators
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.hashers import make_password
 from drf_base64.fields import Base64ImageField
-from recipes.models import Ingredient, Recipe, RecipeIngredient, Subscribe, Tag
 from rest_framework import serializers
+
+from recipes.models import Ingredient, Recipe, RecipeIngredient, Subscribe, Tag
 
 User = get_user_model()
 ERR_MSG = 'Не удается войти в систему с ввёдёнными данными.'
@@ -194,10 +195,11 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
 
     def create_ingredients(self, recipe, ingredients):
         for ingredient in ingredients:
-            RecipeIngredient.objects.bulk_create([
+            Ingr = RecipeIngredient.objects.bulk_create([
                 Recipe(recipe=recipe,
                        ingredient_id=ingredient.get('id'),
                        amount=ingredient.get('amount'), )])
+            return Ingr
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
