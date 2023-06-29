@@ -192,12 +192,12 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Время приготовления >= 1!')
         return data
 
-    def create_ingredients(self, ingredients, recipe):
+    def create_ingredients(self, recipe, ingredients):
         for ingredient in ingredients:
-            RecipeIngredient.objects.bulk_create(
-                recipe=recipe,
-                ingredient_id=ingredient.get('id'),
-                amount=ingredient.get('amount'), )
+            RecipeIngredient.objects.bulk_create([
+                Recipe(recipe=recipe,
+                       ingredient_id=ingredient.get('id'),
+                       amount=ingredient.get('amount'), )])
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')

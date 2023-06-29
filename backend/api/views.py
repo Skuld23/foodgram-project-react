@@ -1,6 +1,5 @@
 import io
 
-from .filters import IngredientFilter, RecipeFilter
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.db.models.aggregates import Count, Sum
@@ -22,8 +21,8 @@ from rest_framework.permissions import (SAFE_METHODS, AllowAny,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
+from .filters import IngredientFilter, RecipeFilter
 from .mixins import GetObjectMixin, PermissionAndPaginationMixin
-
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, SubscribeSerializer,
                           TagSerializer, TokenSerializer, UserCreateSerializer,
@@ -130,7 +129,8 @@ class UsersViewSet(UserViewSet):
         return UserListSerializer
 
     def perform_create(self, serializer):
-        password = make_password(User.vaildate.data['password'])
+        password = make_password(
+          serializer.validated_data['password'])
         serializer.save(password=password)
 
     @action(
@@ -201,7 +201,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
                 page.drawString(
                     x_position, y_position - indent,
                     f'{index}. {recipe["ingredients__name"]} - '
-                    f'{recipe["amount"]} '
+                    f'{recipe["total"]} '
                     f'{recipe["ingredients__measurement_unit"]}.')
                 y_position -= 15
                 if y_position <= 50:
