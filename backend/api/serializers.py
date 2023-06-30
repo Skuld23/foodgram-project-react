@@ -5,21 +5,10 @@ from drf_base64.fields import Base64ImageField
 from rest_framework import serializers
 
 from recipes.models import Ingredient, Recipe, RecipeIngredient, Subscribe, Tag
+from .mixins import SubscribedMixin
 
 User = get_user_model()
 ERR_MSG = 'Не удается войти в систему с ввёдёнными данными.'
-
-
-# При выносе в миксин - не может сюда импортироваться в UserListSerializer
-class GetIsSubscribedMixin:
-
-    def get_is_subscribed(self, obj):
-        user = self.context['request'].user
-        return (
-            user.follower.filter(author=obj).exists()
-            if user.is_authenticated
-            else False
-        )
 
 
 class TokenSerializer(serializers.Serializer):
@@ -56,7 +45,7 @@ class TokenSerializer(serializers.Serializer):
         return attrs
 
 
-class UserListSerializer(GetIsSubscribedMixin, serializers.ModelSerializer):
+class UserListSerializer(SubscribedMixin, serializers.ModelSerializer):
     is_subscribed = serializers.BooleanField(read_only=True)
 
     class Meta:
@@ -133,7 +122,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
             'id', 'name', 'measurement_unit', 'amount')
 
 
-class RecipeUserSerializer(GetIsSubscribedMixin, serializers.ModelSerializer):
+class RecipeUserSerializer(SubscribedMixin, serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField(
         read_only=True)
 
@@ -194,12 +183,10 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         return data
 
     def create_ingredients(self, recipe, ingredients):
-        for ingredient in ingredients:
-            Ingr = RecipeIngredient.objects.bulk_create([
-                Recipe(recipe=recipe,
-                       ingredient_id=ingredient.get('id'),
-                       amount=ingredient.get('amount'), )])
-            return Ingr
+        RecipeIngredient.objects.bulk_create([RecipeIngredient(
+            recipe=recipe, ingredient=ingredient['ingredient']['id'],
+            amount=ingredient.get('amount')
+        ) for ingredient in ingredients])
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')

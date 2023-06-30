@@ -5,7 +5,7 @@ services:
   db:
     image: postgres:13.0-alpine
     volumes:
-      - db_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env
 
@@ -13,6 +13,7 @@ services:
     image: skuld23/foodback:latest
     restart: always
     volumes:
+      - data_value:/code/data/
       - static_value:/app/static/
       - media_value:/app/media/
     depends_on:
@@ -42,6 +43,7 @@ services:
       - frontend
 
 volumes:
+  postgres_data:
   static_value:
   media_value:
-  db_data:
+  data_value:
