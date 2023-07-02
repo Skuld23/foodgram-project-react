@@ -1,19 +1,14 @@
-version: '3.8'
-
 services:
-
   db:
     image: postgres:13.0-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - db_data:/var/lib/postgresql/data/
     env_file:
       - ./.env
 
   backend:
     image: skuld23/foodback:latest
-    restart: always
     volumes:
-      - data_value:/code/data/
       - static_value:/app/static/
       - media_value:/app/media/
     depends_on:
@@ -25,25 +20,22 @@ services:
     image: skuld23/foodfront:latest
     volumes:
       - ../frontend/:/app/result_build/
-    depends_on:
-      - backend
 
   nginx:
     image: nginx:1.21.3-alpine
+    restart: always
     ports:
       - "80:80"
     volumes:
-      - static_value:/var/html/static
-      - media_value:/var/html/media
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
-      - ../docs/:/usr/share/nginx/html/api/docs/
-    restart: always
+      - ./docs/:/usr/share/nginx/html/api/docs/
+      - static_value:/var/html/static/
+      - media_value:/var/html/media/
     depends_on:
       - backend
 
 volumes:
-  postgres_data:
+  db_data:
   static_value:
   media_value:
-  data_value:
