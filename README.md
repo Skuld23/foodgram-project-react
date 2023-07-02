@@ -92,22 +92,3 @@ sudo docker compose exec backend python manage.pyl load_inrgs
 супер юзер - qqq@qqq.qq  пароль qqq 
 www@www.ww пароль qwertqwe
 aaa@aaa.aa пароль qwertqwe
-
-=======
-
-qqq@qqq.qq  пароль qqq
-www@www.ww пароль qwertqwe
-aaa@aaa.aa пароль qwertqwe
-
-
-
-51.250.80.51
-
-
-
-
-
-
-
-//////
->>>>>>> 60982ae93e29877005ba5845de2efd2564baa0a0
