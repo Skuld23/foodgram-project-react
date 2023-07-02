@@ -1,5 +1,4 @@
 [![.github/workflows/main.yml](https://github.com/Skuld23/foodgram-project-react/actions/workflows/main.yml/badge.svg)](https://github.com/Skuld23/foodgram-project-react/actions/workflows/main.yml)
-<<<<<<< HEAD
 ##  Описание
 Foodgram - продуктовый помощник с базой кулинарных рецептов. Позволяет публиковать рецепты, сохранять избранные, а также формировать список покупок для выбранных рецептов. Можно подписываться на любимых авторов.
 
