@@ -1,14 +1,20 @@
 from django.contrib import admin
-from django.contrib.auth import get_user_model
 
-User = get_user_model()
+from .models import Follow, User
 
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'username', 'email',
-        'first_name', 'last_name', 'date_joined',)
-    search_fields = ('email', 'username', 'first_name', 'last_name')
-    list_filter = ('date_joined', 'email', 'first_name')
-    empty_value_display = '-пусто-'
+
+    list_display = ('id', 'username', 'first_name', 'last_name', 'email', )
+    search_fields = ('username', 'email', )
+    list_filter = ('first_name', 'email', )
+    list_display_links = ('username', )
+
+
+@admin.register(Follow)
+class FollowAdmin(admin.ModelAdmin):
+
+    list_display = ('user', 'author')
+    list_filter = ('user', 'author')
+    search_fields = ('user', 'author')

@@ -60,7 +60,7 @@ sudo docker compose exec backend python manage.py createsuperuser
 13. Загрузите подготовленный список ингредиентов для работы с проектом
 ```
 sudo docker compose exec backend python manage.py load_tags
-sudo docker compose exec backend python manage.pyl load_inrgs
+sudo docker compose exec backend python manage.py load_inrgs
 ```
 
 ### Настроен Workflow, который состоит из четырех шагов:
@@ -87,8 +87,9 @@ sudo docker compose exec backend python manage.pyl load_inrgs
 - `PASSPHRASE` = пароль от сервера
 
 <h2>Проект доступен по адресу 
-<http://51.250.80.51/signin>
+
 ## Пользователи 
-супер юзер - qqq@qqq.qq  пароль qqq 
-www@www.ww пароль qwertqwe
-aaa@aaa.aa пароль qwertqwe
+
+- супер юзер - qqq@qqq.qq  пароль qqq 
+- www@www.ww пароль qwertqwe
+- aaa@aaa.aa пароль qwertqwe
