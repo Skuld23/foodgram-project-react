@@ -87,8 +87,9 @@ sudo docker compose exec backend python manage.py load_inrgs
 - `PASSPHRASE` = пароль от сервера
 
 <h2>Проект доступен по адресу 
+158.160.108.186
 
-## Пользователи 
+  ## Пользователи 
 
 - супер юзер - qqq@qqq.qq  пароль qqq 
 - www@www.ww пароль qwertqwe
