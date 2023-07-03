@@ -54,9 +54,10 @@ class FavoriteReceipeAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+
 @admin.register(ShoppingCart)
 class ShoppingCartAdmin(admin.ModelAdmin):
-    """Админ панель списка покупок."""
+
     list_display = ('user', 'recipe',)
     list_filter = ('user', 'recipe',)
     search_fields = ('user', )
