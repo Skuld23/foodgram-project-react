@@ -1,11 +1,12 @@
 import base64
 
 from django.core.files.base import ContentFile
-from foodgram.settings import ZERO_MIN_VALUE
-from recipes.models import Ingredient, IngredientInRecipesAmount, Recipe, Tag
 from rest_framework.serializers import (CharField, ImageField, ModelSerializer,
                                         PrimaryKeyRelatedField, ReadOnlyField,
                                         SerializerMethodField, ValidationError)
+
+from foodgram.settings import ZERO_MIN_VALUE
+from recipes.models import Ingredient, IngredientInRecipesAmount, Recipe, Tag
 from users.models import Follow, User
 
 
