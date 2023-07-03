@@ -1,11 +1,12 @@
 import base64
 
 from django.core.files.base import ContentFile
-from foodgram.settings import ZERO_MIN_VALUE
-from recipes.models import Ingredient, IngredientInRecipesAmount, Recipe, Tag
 from rest_framework.serializers import (CharField, ImageField, ModelSerializer,
                                         PrimaryKeyRelatedField, ReadOnlyField,
                                         SerializerMethodField, ValidationError)
+
+from foodgram.settings import ZERO_MIN_VALUE
+from recipes.models import Ingredient, IngredientInRecipesAmount, Recipe, Tag
 from users.models import Follow, User
 
 
@@ -257,13 +258,13 @@ class RecipesWriteSerializer(ModelSerializer):
                 })
             ingredients_list.append(ingredient_id)
             amount = ingredient['amount']
-            if int(amount) == ZERO_MIN_VALUE:
+            if int(amount) <= ZERO_MIN_VALUE:
                 raise ValidationError({
-                    'Количество ингридиента не может быть = 0'
+                    'Количество ингридиента не может быть < 0'
                 })
-        if int(cooking_time) == ZERO_MIN_VALUE:
+        if int(cooking_time) <= ZERO_MIN_VALUE:
             raise ValidationError({
-                'Время приготовления не может быть = 0!'
+                'Время приготовления не может быть < 0!'
             })
         return data
 
@@ -294,8 +295,7 @@ class RecipesWriteSerializer(ModelSerializer):
 
     def update(self, instance, validated_data):
         request = self.context.get('request')
-        if request.user.is_authenticated and \
-           request.user.id == instance.author_id:
+        if request.user.id == instance.author_id:
             tags = validated_data.pop('tags')
             instance.tags.clear()
             instance.tags.set(tags)
